@@ -37,6 +37,16 @@ class Message:
 
     def returnObject(self):
         return self
+    
+    '''
+    Return the user
+    @returns: User
+    '''
+    def user(self):
+        return self.user()
+
+    def messages(self):
+        return self.messages
 
 
 def mapDM(file="none", contents="none"):
