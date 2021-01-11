@@ -17,4 +17,7 @@ hello
 mZe12/21/2020
 hello!
 """
-mapper.mapDM(contents=CHAT)
+for message_title in mapper.mapDM(contents=CHAT):
+    print(message_title.user)
+    for message in message_title:
+        print("\t"+message)

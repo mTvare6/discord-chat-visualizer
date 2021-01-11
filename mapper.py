@@ -27,7 +27,7 @@ class Message:
     @param: message to add
     """
 
-    def pop(self, message):
+    def append(self, message):
         self.messages.append(message)
 
     """
@@ -58,12 +58,12 @@ def mapDM(file="none", contents="none"):
     mapped_messages = []
     static_referer = OrderedDict()
     for line in contents_list:
+        tmp_message = Message("", "")
         if re.match(CHAT_HEAD, line):
-            tmp_message = Message("", line)
-            for value in static_referer["temp"]:
-                tmp_message.pop(value)
+            print(line)
             mapped_messages.append(tmp_message.returnObject)
+            tmp_message = Message("", line)
             static_referer["temp"] = []
         else:
-            static_referer["temp"].append(line)
+            tmp_message.append(line)
     return mapped_messages
