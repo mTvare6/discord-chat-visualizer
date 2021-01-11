@@ -3,6 +3,7 @@
 Why does my linter tell me to put this here???!?!?
 '''
 
+from os import _exit
 from collections import OrderedDict
 from pathlib import Path
 import re
@@ -37,21 +38,24 @@ class Message:
         return self
 
 
-def map_to_dm(file='none', contents='none'):
+def content_unloader(file='none'):
+    '''
+      Takes a file  and gives content
+      @param: filePath of text
+      @returns: content of file
+    '''
+    contents = Path(file).read_text()
+    return contents
+
+
+def map_to_dm(file='none'):
     '''
     Takes a file and returns mapped dictionary with messages
     @param: filePath, or content of text
     @returns: Dictionary with date and name mapped to a list containing message
     '''
 
-    if file == 'none' and contents == 'none':
-        return 'Either provide file path or content'
-    if contents == 'none' and file != 'none':
-        contents = Path(file).read_text()
-    if file == 'none' and contents != 'none':
-        pass
-    if file != 'none' and contents != 'none':
-        return 'Either provide file path or content, not both'
+    contents = content_unloader(file)
     contents_list = contents.split('\n')
     mapped_messages = []
     for line in contents_list:
