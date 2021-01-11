@@ -66,14 +66,12 @@ def mapDM(file="none", contents="none"):
         return "Either provide file path or content, not both"
     contents_list = contents.split("\n")
     mapped_messages = []
-    static_referer = OrderedDict()
     for line in contents_list:
         tmp_message = Message("", "")
         if re.match(CHAT_HEAD, line):
             print(line)
             mapped_messages.append(tmp_message.returnObject)
             tmp_message = Message("", line)
-            static_referer["temp"] = []
         else:
             tmp_message.append(line)
     return mapped_messages

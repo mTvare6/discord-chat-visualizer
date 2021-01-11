@@ -18,7 +18,4 @@ mZe12/21/2020
 hello!
 """
 message_titles = mapper.mapDM(contents=CHAT)
-for message_title in message_titles:
-    print(message_title.user())
-    for message in message_title.messages():
-        print("\t"+message)
+
