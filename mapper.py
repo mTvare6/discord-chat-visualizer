@@ -60,6 +60,8 @@ def map_to_dm(file='none'):
     mapped_messages = []
     for line in contents_list:
         if re.match(CHAT_HEAD, line):
+            if len(mapped_messages)>0:
+                mapped_messages[-1].append('')
             mapped_messages.append(Message('', line))
         else:
             mapped_messages[-1].append(line)
