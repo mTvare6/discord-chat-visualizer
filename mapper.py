@@ -1,15 +1,15 @@
-#!/usr/bin/env python3
-'''
-Why does my linter tell me to put this here???!?!?
-'''
-
+from datetime import datetime
 from os import _exit
 from collections import OrderedDict
 from pathlib import Path
 import re
+from datetime import datetime
 
-CHAT_HEAD = r'...+\d{2}/\d{2}/\d{4}$'
-
+DATE_HEAD = r'(.){3,32}\d{2}/\d{2}/\d{4}$'
+YESTERDAY_HEAD_1 = r'(.){3,32}Yesterday\sat\s\d{1}:\d{2}\s(AM|PM)$'
+TODAY_HEAD_1 = r'(.){3,32}Today\sat\s\d{1}:\d{2}\s(AM|PM)$'
+YESTERDAY_HEAD_2 = r'(.){3,32}Yesterday\sat\s\d{2}:\d{2}\s(AM|PM)$'
+TODAY_HEAD_2 = r'(.){3,32}Today\sat\s\d{2}:\d{2}\s(AM|PM)$'
 
 class Message:
 
@@ -47,7 +47,14 @@ def content_unloader(file='none'):
     contents = Path(file).read_text()
     return contents
 
-
+Today = datetime.today().strftime('%d/%m/%Y')
+Yesterday = datetime.today().strftime('%d/%m/%Y')
+tmp_date = str(int(Yesterday[0:2])-1)
+Yesterday = list(Yesterday)
+Yesterday[0] = tmp_date[0]
+Yesterday[1] = tmp_date[1]
+Yesterday = ''.join(Yesterday)
+tmp_date = None
 def map_to_dm(file='none'):
     '''
     Takes a file and returns mapped dictionary with messages
@@ -59,10 +66,30 @@ def map_to_dm(file='none'):
     contents_list = contents.split('\n')
     mapped_messages = []
     for line in contents_list:
-        if re.match(CHAT_HEAD, line):
+        if re.match(DATE_HEAD, line):
             if len(mapped_messages)>0:
                 mapped_messages[-1].append('')
             mapped_messages.append(Message('', line))
+        elif re.match(YESTERDAY_HEAD_1, line):
+            if len(mapped_messages)>0:
+                mapped_messages[-1].append('')
+            mapped_messages.append(Message('', line[:-20]+Yesterday))
+
+        elif re.match(YESTERDAY_HEAD_2, line):
+            if len(mapped_messages)>0:
+                mapped_messages[-1].append('')
+            mapped_messages.append(Message('', line[:-21]+Yesterday))
+
+        elif re.match(TODAY_HEAD_1, line):
+            if len(mapped_messages)>0:
+                mapped_messages[-1].append('')
+            mapped_messages.append(Message('', line[:-16]+Today))
+
+        elif re.match(TODAY_HEAD_2, line):
+            if len(mapped_messages)>0:
+                mapped_messages[-1].append('')
+            mapped_messages.append(Message('', line[:-17]+Today))
+
         else:
             mapped_messages[-1].append(line)
     return mapped_messages
