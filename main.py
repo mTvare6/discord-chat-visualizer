@@ -4,8 +4,7 @@ from os import get_terminal_size
 
 
 def generate_spaces(content, sep=" "):
-    raw_term_size = str(get_terminal_size()).split(" ")
-    terminal_size = int(raw_term_size[0][25:][:-1])
+    terminal_size = get_terminal_size().columns
     addable_chars = int((terminal_size-len(content))/2)
     return (sep*(addable_chars-1)+" "+content+" "+sep*(addable_chars-1))
 
